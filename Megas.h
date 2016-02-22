@@ -1,8 +1,7 @@
-#include <EEPROM.h>
-#include <Arduino.h>  // for type definitions
-
 #ifndef Megas_h
 #define Megas_h
+
+#include <Arduino.h>  // for type definitions
 
 //Global
  const static byte TOTAL_PINS             PROGMEM = 70;
@@ -17,87 +16,34 @@
 
  //DIGITAL
  const static byte MODE_DIGITAL_DISABLED PROGMEM = 50;
- const static byte MODE_BUTTON          PROGMEM = 51;
- const static byte MODE_PIR             PROGMEM = 52;
- const static byte MODE_RELAY           PROGMEM = 53;
- const static byte MODE_DHT22           PROGMEM = 54; 
- const static byte MODE_DHT11           PROGMEM = 55; 
- const static byte MODE_DBS18           PROGMEM = 56; 
- const static byte MODE_1WIRE           PROGMEM = 57; 
- const static byte MODE_SERVO           PROGMEM = 70; 
- const static byte MODE_SERVO_COMPLEX   PROGMEM = 71; 
+ const static byte MODE_BUTTON           PROGMEM = 51;
+ const static byte MODE_PIR              PROGMEM = 52;
+ const static byte MODE_RELAY            PROGMEM = 53;
+ const static byte MODE_DHT_TEMP         PROGMEM = 54; 
+ const static byte MODE_DHT_HUM          PROGMEM = 54; 
+  const static byte MODE_DBS18           PROGMEM = 56; 
+ const static byte MODE_1WIRE            PROGMEM = 57; 
+ const static byte MODE_SERVO            PROGMEM = 70; 
+ const static byte MODE_SERVO_COMPLEX    PROGMEM = 71; 
 
+//ThresholdModes
+ const static byte TMODE_EQUAL      PROGMEM = 0;
+ const static byte TMODE_BELOW      PROGMEM = 1;
+ const static byte TMODE_ABOVE      PROGMEM = 2;
+ const static byte TMODE_EQBELOW    PROGMEM = 3;
+ const static byte TMODE_EQABOVE    PROGMEM = 4;
 
+ const static byte DISABLED_DIGITAL_PINS[] PROGMEM = {0,1,4,10,11,12,13,50,51,52,53};
 
-template <class T> int EEPROM_writeAnything(int ee, const T& value)
-{
-    const byte* p = (const byte*)(const void*)&value;
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          EEPROM.write(ee++, *p++);
-    return i;
+boolean checkThreshold(double value, double  Threshold, byte ThresholdMode) {
+  if ( ThresholdMode == TMODE_EQUAL && value == Threshold) {return true;}
+  if ( ThresholdMode == TMODE_BELOW && value < Threshold) {return true;}
+  if ( ThresholdMode == TMODE_ABOVE && value > Threshold) {return true;}
+  if ( ThresholdMode == TMODE_EQBELOW && value <= Threshold) {return true;}
+  if ( ThresholdMode == TMODE_EQABOVE && value >= Threshold) {return true;} 
+  return false; 
+  
 }
 
-template <class T> int EEPROM_readAnything(int ee, T& value)
-{
-    byte* p = (byte*)(void*)&value;
-    unsigned int i;
-    for (i = 0; i < sizeof(value); i++)
-          *p++ = EEPROM.read(ee++);
-    return i;
-}
-
-const static byte DISABLED_DIGITAL_PINS[] PROGMEM = {0,1,4,10,11,12,13,50,51,52,53};
-
-class PinMode {
-public:
-   void init(byte _pin, byte _mode);
-   boolean isAnalog();
-   boolean isDigital();
-   boolean isDisabled();
-   byte getPin();
-   byte getMode();
-protected:
-   byte pin;
-   byte mode;
-
-};
-
-void PinMode::init(byte _pin, byte _mode){
-  pin = _pin;
-  mode = _mode;
-}
-// Getter function
-boolean PinMode::isAnalog(){
-  if (mode<50) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-boolean PinMode::isDigital(){
-  if (this->isAnalog()) {
-    return false;
-  } else {
-    return true;
-  }
-}
-
-boolean PinMode::isDisabled(){
-  if ( mode == MODE_ANALOG_DISABLED || mode == MODE_DIGITAL_DISABLED ) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-byte PinMode::getPin(){
-  return pin;
-}
-
-byte PinMode::getMode(){
-  return mode;
-}
 
 #endif

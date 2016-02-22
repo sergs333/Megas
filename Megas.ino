@@ -12,9 +12,9 @@
  *
  */
 
-#include <EEPROM.h>
-#include <DHT.h>
+#include "EEPROM_lib.h"
 #include "megas.h"
+#include "DHT_pin.h"
 
 const static char SOFT_REVISION[] PROGMEM = "MEGADS:01";
 struct pin_t { byte mode; //short multiplier; short UpperLimit; short LowerLimit; //char Action[51];
@@ -39,7 +39,9 @@ void readEEPROM() {
 }
 
 const int MAXIMUM_AVAILABLE_PINS PROGMEM = 50;
-PinMode pins[MAXIMUM_AVAILABLE_PINS]; // An array of MyClass objects using default constructor
+Pin pins[MAXIMUM_AVAILABLE_PINS]; // An array of MyClass objects using default constructor
+
+DHT dht,dht2;
 
 void init_pins(){
   //init Analog
