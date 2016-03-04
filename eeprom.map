@@ -1,0 +1,28 @@
+"MEGAS" 				- 5 bytes
+Version 				- 1 byte
+EXTERNAL_SREVER_LENGTH			- 1 byte  // if 0 external configuration missing
+
+[ external ]
+EXTERNAL_SERVER_IP			- 4 bytes 
+EXTERNAL_SERVER_PORT			- 2 bytes
+EXTERNAL_URL				- EXTERNAL_SERVER_LENGTH bytes // upto 256
+[#end of external]
+
+ANALOG_AMPERAGE_PINS
+ANALOG_TEMPRETURE_PINS
+
+
+PIRoBUTTON_PINS            
+RELAY_PINS
+DHT_PINS
+DHT_ACTION_PINS
+SERVO_PINS
+
+//DBS18_PINS
+ const static byte MODE_1WIRE             PROGMEM = 57; 
+
+ const static byte MODE_SERVO_COMPLEX     PROGMEM = 71; 
+
+
+
+
